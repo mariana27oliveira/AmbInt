@@ -9,6 +9,7 @@ intents:
 - nr_utente
 - preferencia
 - saudacao
+- listar_consultas
 entities:
 - data
 - preferencia
@@ -43,17 +44,19 @@ slots:
       entity: preferencia
 responses:
   utter_saudacao:
-  - text: Olá! Eu sou o chatbot de consultas. Como te chamas?
+  - text: Olá! Sou o chatbot responsável pelo agendamento de consultas na Clínica Saúde Total. Como te chamas?
   utter_despedida:
   - text: Obrigada! Até breve!
   utter_questionar:
-  - text: Olá {nome}! Em que te posso ajudar?
+  - text: Bem-vindo(a) à nossa clinica {nome}! Em que posso ajudar?
   utter_numero_utente:
   - text: Por favor, indica o teu número de utente
+  utter_ask_nr_utente:
+  - text: Claro! Podes indicar-me qual é o teu número de utente?
   utter_especialidade:
   - text: Em que especialidade gostarias de agendar uma consulta?
   utter_data:
-  - text: Em que data gostarias de agendar uma consulta? Por favor, indica no seguinte formato dd-mm-aaaa
+  - text: Em que data gostarias de agendar uma consulta?
   utter_preferencia:
   - text: Preferes que a tua consulta seja de manhã ou de tarde?
 session_config:
@@ -70,3 +73,4 @@ actions:
 - utter_preferencia
 - utter_questionar
 - cancelar_consulta
+- action_listar_consultas

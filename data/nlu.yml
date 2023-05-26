@@ -14,6 +14,15 @@ nlu:
 - intent: consulta
   examples: |
     - Quero marcar uma consulta
+- intent: listar_consultas
+  examples: |
+    - quais são as minhas consultas?
+    - que consultas tenho agendadas
+    - listar consultas
+    - listar as minhas consultas
+    - quero saber quais são as minhas consultas
+    - lista das minhas consultas
+    - próximas consultas
 - intent: nome
   examples: |
     - [Joana](nome)
@@ -25,6 +34,7 @@ nlu:
     - [123456789](nr_utente)
     - [111111111](nr_utente)
     - [111111111](nr_utente)
+    - [190054321](nr_utente)
 - intent: especialidade
   examples: |
     - [Ortopedia](especialidade)
@@ -34,6 +44,10 @@ nlu:
     - [Oftalmologista](especialidade)
     - [Oftalmologia](especialidade)
     - [Ortopedia](especialidade)
+    - [Psicologia](especialidade)
+    - [Pediatria](especialidade)
+    - [Dermatologia](especialidade)
+    - [Cardiologia](especialidade)
 - intent: data
   examples: |
     - [27-12-2023](data)
@@ -41,6 +55,14 @@ nlu:
     - [27-07-2023](data)
     - [29-08-2023](data)
     - [27-06-2023](data)
+    - [amanhã](data)
+    - [próximo mês](data)
+    - [próxima semana](data)
+    - [18 de maio](data)
+    - [20 de Agosto](data)
+    - [27/05/2023](data)
+    - [27/06](data)
+    - [27-06](data)
 - intent: preferencia
   examples: |
     - [tarde](preferencia)

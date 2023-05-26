@@ -105,3 +105,25 @@ stories:
   - action: agendar_consulta
   - intent: despedida
   - action: utter_despedida
+
+
+- story: Listar Consultas
+  steps:
+  - intent: saudacao
+  - action: utter_saudacao
+  - intent: nome
+    entities:
+    - nome: Maria
+  - slot_was_set:
+    - nome: Maria
+  - action: utter_questionar
+  - intent: listar_consultas
+  - action: utter_ask_nr_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '190054321'
+  - slot_was_set:
+    - nr_utente: '190054321'
+  - action: action_listar_consultas
+  - intent: despedida
+  - action: utter_despedida
