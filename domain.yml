@@ -1,0 +1,76 @@
+version: '3.1'
+intents:
+- confirmacao
+- consulta
+- data
+- especialidade
+- numero_utente
+- preferencia
+- nome
+- saudacao
+- despedida
+entities:
+- nome
+- especialidade
+- preferencia
+- nr_utente
+- numero_utente
+- data_dia
+- data_mes
+slots:
+  nome:
+    type: any
+    mappings:
+    - type: from_entity
+      entity: nome
+  numero_utente:
+    type: any
+    mappings:
+    - type: from_entity
+      entity: numero_utente
+  data:
+    type: any
+    mappings:
+    - type: from_entity
+      entity: data_dia
+  especialidade:
+    type: any
+    mappings:
+    - type: from_entity
+      entity: especialidade
+  preferencia:
+    type: any
+    mappings:
+    - type: from_entity
+      entity: preferencia
+responses:
+  utter_saudacao:
+  - text: Olá! Eu sou o chatbot de consultas. Como te chamas?
+  utter_despedida:
+  - text: Obrigada! Até breve!
+  utter_questionar:
+  - text: Olá {nome}! Em que te posso ajudar?
+  utter_numero_utente:
+  - text: Por favor, indica o teu número de utente
+  utter_especialidade:
+  - text: Em que especialidade gostarias de agendar uma consulta?
+  utter_data:
+  - text: Em que data gostarias de agendar uma consulta? Por favor, indica no seguinte formato dd/mm/yyyy
+  utter_confirmacao:
+  - text: A tua consulta está agendada para o {data_dia} de {data_mes} para a especialidade de {especialidade}. Correto?
+  utter_preferencia:
+  - text: Preferes que a tua consulta seja de manhã ou de tarde?
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+actions:
+- utter_numero_utente
+- utter_questionar
+- action_preferencia
+- utter_saudacao
+- utter_especialidade
+- utter_preferencia
+- utter_data
+- utter_confirmacao
+- utter_despedida
+- agendar_consulta
