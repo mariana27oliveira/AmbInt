@@ -17,7 +17,11 @@ stories:
   - intent: especialidade
   - action: utter_data
   - intent: data
+  - action: utter_preferencia
+  - intent: preferencia
   - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
 
 
 

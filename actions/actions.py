@@ -27,17 +27,26 @@
 #         return []
 
 
-from typing import Text, List, Any, Dict
-from rasa_sdk import Tracker, Action
-from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.types import DomainDict
-from rasa_sdk.events import SlotSet
 from datetime import datetime, timedelta
+from typing import Any, Text, Dict, List
+
 import dateparser
 import pymongo
+from rasa_sdk import Action, Tracker
+from rasa_sdk.events import SlotSet
+from rasa_sdk.executor import CollectingDispatcher
 
-ALLOWED_MANHA_TARDE = ['manha', 'tarde']
+SLOT_NOME = "nome"
+SLOT_ESPECICALIDADE = "especialidade"
+SLOT_UTENTE = "nr_utente"
+SLOT_DATA = "data"
+SLOT_TURNO = "preferencia"
 
+DBNAME = "ClinicaSaudeTotal"
+AGENDA = "Agenda"
+HORARIO = "Horario"
+ESPECIALIDADE = ['Cardiologia', 'Dermatologia', 'Ginecologia', 'Ortopedia',
+                 'Oftalmologia', 'Pediatria', 'Psicologia', 'Fisioterapia']
 
 
 class AgendarConsultaAction(Action):
@@ -45,106 +54,130 @@ class AgendarConsultaAction(Action):
         return "agendar_consulta"
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        especialidade = tracker.get_slot("especialidade")
-        data = tracker.get_slot("data")
-        nome = tracker.get_slot("nome")
-        numero_utente = tracker.get_slot("nr_utente")
+        especialidade = tracker.get_slot(SLOT_ESPECICALIDADE)
+        data = tracker.get_slot(SLOT_DATA)
+        nome = tracker.get_slot(SLOT_NOME)
+        numero_utente = tracker.get_slot(SLOT_UTENTE)
+        turno = tracker.get_slot(SLOT_TURNO)
 
-        parsed_date = validaData(self, data, dispatcher)
+        valida = valida_especialidade(self, especialidade, dispatcher)
+        if not valida:
+            return [SlotSet(SLOT_ESPECICALIDADE, None), SlotSet("requested_slot", SLOT_ESPECICALIDADE)]
+
+        parsed_date = valida_data(self, data, dispatcher)
         if parsed_date is None:
-            return [SlotSet("data", None)]
+            return [SlotSet(SLOT_DATA, None), SlotSet("requested_slot", SLOT_DATA)]
 
         # Ligar à base de dados
-        client, agenda_collection = fetch_connection(self)
+        client, db = fetch_connection()
         try:
             # Verificar disponibilidade da data
-            disponivel = self.verificar_disponibilidade(parsed_date, especialidade, agenda_collection)
-            if not disponivel:
-                dias = self.procura_dias_livres(parsed_date, especialidade, agenda_collection)
+            horario_livre = procura_horario_livre(self, parsed_date, especialidade, turno, db)
+            if not horario_livre:
+                dias = procura_dias_livres(self, parsed_date, especialidade, turno, db)
                 if len(dias) > 0:
                     mensagem = f"\nLamento, mas não há disponibilidade para a data pretendida. " \
-                               "Aqui estão algumas opções disponíveis nos próximos dias:\n\t" + "\n\t".join(dias) + \
+                               f"Aqui estão alguns dias com disponibilidade para de {turno}:\n\t" + "\n\t".join(dias) + \
                                f"\nPor favor, indique qual o dia que pretende agendar."
                 else:
                     mensagem = f"Lamento, mas não há mais disponibilidade em {especialidade} nos próximos 15 dias. " \
                                f"\nPretende sugerir uma data posterior a isso?"
 
                 dispatcher.utter_message(text=mensagem)
-                return [SlotSet("data", None)]
+                return [SlotSet(SLOT_DATA, None), SlotSet("requested_slot", SLOT_DATA)]
 
             # Agendar a consulta
             consulta = {
                 "especialidade": especialidade,
                 "data": parsed_date,
+                "hora": horario_livre,
                 "numero_utente": numero_utente
             }
-            agenda_collection.insert_one(consulta)
+            db[AGENDA].insert_one(consulta)
         finally:
             # Fechar a ligação
             client.close()
 
         # Mensagem de resposta
-        mensagem = f"{nome}, a sua consulta de {especialidade} foi agendada para o dia {parsed_date}."
+        mensagem = f"{nome}, a sua consulta de {especialidade} foi agendada para o dia {parsed_date} às {horario_livre}."
         dispatcher.utter_message(text=mensagem)
 
         return []
 
-    def verificar_disponibilidade(self, data, especialidade, agenda_collection):
-        # Verificar se há disponibilidade na data pretendida
-        ocupado = agenda_collection.find_one({"data": data, "especialidade": especialidade})
-        if not ocupado:
-            return True
-        return False
 
-    def procura_dias_livres(self, data, especialidade, agenda_collection):
-        dias = []
-        data_obj = datetime.strptime(data, "%d-%m-%Y")
-        data_obj += timedelta(days=1)
-
-        for _ in range(15):
-            ocupado = agenda_collection.find_one(
-                {"data": data_obj.strftime("%d-%m-%Y"), "especialidade": especialidade})
-            if not ocupado:
-                dias.append(data_obj.strftime("%d-%m-%Y"))
-                if len(dias) == 7:
-                    return dias
-                data_obj += timedelta(days=1)
-
-        return dias
+horarios_clinica = {
+    "manha": ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30"],
+    "tarde": ["14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00"]
+}
 
 
-def validaData(self, data, dispatcher):
+def procura_horario_livre(self, parsed_date, especialidade, turno, db):
+    horarios = None
+    if turno is None:
+        horarios = horarios_clinica["manha"] + horarios_clinica["tarde"]
+    elif turno.lower() == "manha" or turno.lower() == "manhã":
+        horarios = horarios_clinica["manha"]
+    elif turno.lower() == "tarde":
+        horarios = horarios_clinica["tarde"]
+
+    proximo_horario_livre = None
+    for horario in horarios:
+        agendamento = db[AGENDA].find_one(
+            {
+                "especialidade": especialidade,
+                "data": parsed_date,
+                "hora": horario
+            }
+        )
+        if agendamento is None:
+            # Horário livre
+            proximo_horario_livre = horario
+            break
+    return proximo_horario_livre
+
+
+def procura_dias_livres(self, data, especialidade, turno, db):
+    dias = []
+    data_obj = datetime.strptime(data, "%d-%m-%Y")
+    data_obj += timedelta(days=1)
+
+    for _ in range(15):
+        horario_livre = procura_horario_livre(self, data_obj.strftime("%d-%m-%Y"), especialidade, turno, db)
+        if horario_livre:
+            dias.append(data_obj.strftime("%d-%m-%Y"))
+            if len(dias) == 7:
+                return dias
+            data_obj += timedelta(days=1)
+
+    return dias
+
+
+def valida_data(self, data, dispatcher):
     # Converter a data num objeto data
     try:
         parsed_date = dateparser.parse(data, languages=["pt"])
     except:
         parsed_date = None
+
     # Verificar se a conversão foi bem-sucedida
     if parsed_date is not None:
         return parsed_date.strftime("%d-%m-%Y")
     else:
         # Caso a conversão da data tenha falhado
-        mensagem = "Peço desculpa, não consegui entender a data fornecida. " \
-                   "Por favor, utilize por exemplo o formato dd-mm-aaaa."
+        mensagem = f"Peço desculpa, não consegui entender a data [{data}] fornecida. " \
+                   f"Por favor, utilize por exemplo o formato dia-mês."
         dispatcher.utter_message(text=mensagem)
         return None
 
 
-def fetch_connection(self):
-    # Ligar à base de dados
-    client = pymongo.MongoClient("mongodb://localhost:9000")
-    try:
-        db = client["ClinicaSaudeTotal"]
-        agenda_collection = db["Agenda"]
-        return client, agenda_collection
-    except:
-        # Fechar a ligação
-        client.close()
-
-
-
-
-
+def valida_especialidade(self, especialidade, dispatcher):
+    if especialidade not in ESPECIALIDADE:
+        mensagem = f"Lamento, mas não temos a especialidade [{especialidade}] na Clínica Saúde Total. " \
+                   f"Dispomos apenas das seguintes especialidades médicas: \t\n" + \
+                   "\n\t".join(ESPECIALIDADE) + "\nQual das especialidades pretende?"
+        dispatcher.utter_message(text=mensagem)
+        return False
+    return True
 
 
 class CancelarConsultaAction(Action):
@@ -152,54 +185,77 @@ class CancelarConsultaAction(Action):
         return "cancelar_consulta"
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        especialidade = tracker.get_slot("especialidade")
-        data = tracker.get_slot("data")
-        nome = tracker.get_slot("nome")
-        numero_utente = tracker.get_slot("nr_utente")
+        especialidade = tracker.get_slot(SLOT_ESPECICALIDADE)
+        data = tracker.get_slot(SLOT_DATA)
+        nome = tracker.get_slot(SLOT_NOME)
+        numero_utente = tracker.get_slot(SLOT_UTENTE)
 
-        parsed_date = validaData(self, data, dispatcher)
+        valida = valida_especialidade(self, especialidade, dispatcher)
+        if not valida:
+            return [SlotSet(SLOT_ESPECICALIDADE, None), SlotSet("requested_slot", SLOT_ESPECICALIDADE)]
+
+        parsed_date = valida_data(self, data, dispatcher)
         if parsed_date is None:
-            return [SlotSet("data", None)]
+            return [SlotSet(SLOT_DATA, None), SlotSet("requested_slot", SLOT_DATA)]
 
-        client, agenda_collection = fetch_connection(self)
+        client, db = fetch_connection()
         try:
             # Verificar se existe uma marcação para o dia referido pelo utilizador
-            marcado = self.existe_marcacao_do_utente(parsed_date, especialidade, numero_utente, agenda_collection)
-            if marcado:
+            marcacao = self.get_marcacao_do_utente(parsed_date, especialidade, numero_utente, db)
+            if marcacao:
                 # remover marcação
                 consulta = {
                     "especialidade": especialidade,
                     "data": parsed_date,
                     "numero_utente": numero_utente
                 }
-                agenda_collection.remove(consulta)
+                db[AGENDA].remove(consulta)
                 # Mensagem de resposta
-                mensagem = f"{nome}, a sua consulta de {especialidade} marcada para o dia {parsed_date} foi cancelada."
+                hora = marcacao["hora"]
+                mensagem = f"{nome}, a sua consulta de {especialidade} marcada para o dia {parsed_date} às {hora} foi cancelada."
                 dispatcher.utter_message(text=mensagem)
 
             else:
 
                 mensagem = f"Não existe nenhuma marcação para si no dia {parsed_date} em {especialidade}. Pode repetir a data da sua marcação?"
                 dispatcher.utter_message(text=mensagem)
-                return [SlotSet("data", None)]
+                return [SlotSet(SLOT_DATA, None), SlotSet("requested_slot", SLOT_DATA)]
 
         finally:
             # Fechar a ligação
             client.close()
 
-        return []
+        return [SlotSet(SLOT_ESPECICALIDADE, None), SlotSet(SLOT_DATA, None)]
 
-    def existe_marcacao_do_utente(self, data, especialidade, numero_utente, agenda_collection):
+    def get_marcacao_do_utente(self, data, especialidade, numero_utente, db):
         # Verificar se existe algum registo para o utente no dia referiado
-        ocupado = agenda_collection.find_one(
+        marcacao = db[AGENDA].find_one(
             {"data": data, "especialidade": especialidade, "numero_utente": numero_utente})
-        if ocupado:
-            return True
-        return False
+        if marcacao:
+            return marcacao
+        return None
 
 
+class ActionResetSlots(Action):
+    def name(self) -> Text:
+        return "action_reset_slots"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return [SlotSet(SLOT_NOME, None), SlotSet(SLOT_ESPECICALIDADE, None), SlotSet(SLOT_DATA, None),
+                SlotSet(SLOT_UTENTE, None)]
 
 
+def fetch_connection():
+    # Ligar à base de dados
+    client = pymongo.MongoClient("mongodb://localhost:9000")
+    try:
+        db = client[DBNAME]
+        return client, db
+    except:
+        # Fechar a ligação
+        client.close()
 
 class ActionPreferencia(Action):
     def name(self) -> Text:
@@ -215,4 +271,3 @@ class ActionPreferencia(Action):
         else:
           dispatcher.utter_message(text=f"Ok!! A Preferência é {preferencia}")
           return []
-    
