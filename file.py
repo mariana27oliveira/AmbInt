@@ -47,4 +47,25 @@ POR ALGUMA COISA DA AULA DE DIREITO NO RELATÓRIO
   - intent: confirmacao
   - action: utter_despedida
 
+  
+- story: marcar consulta 
+  steps:
+  - intent: saudacao
+  - action: utter_saudacao
+  - intent: nome
+  - action: utter_questionar
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: numero_utente
+  - action: utter_especialidade
+  - intent: especialidade
+  - action: utter_data
+  - intent: data
+  - action: utter_preferencia
+  - intent: preferencia
+  - action: action_preferencia
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
 '''

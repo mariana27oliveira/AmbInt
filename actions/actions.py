@@ -180,7 +180,7 @@ class CancelarConsultaAction(Action):
         especialidade = tracker.get_slot("especialidade")
         data = tracker.get_slot("data")
         nome = tracker.get_slot("nome")
-        numero_utente = tracker.get_slot("utente")
+        numero_utente = tracker.get_slot("nr_utente")
 
         parsed_date = validaData(self, data, dispatcher)
         if parsed_date is None:

@@ -14,25 +14,23 @@ entities:
 - especialidade
 - preferencia
 - nr_utente
-- numero_utente
-- data_dia
-- data_mes
+- data
 slots:
   nome:
     type: any
     mappings:
     - type: from_entity
       entity: nome
-  numero_utente:
+  nr_utente:
     type: any
     mappings:
     - type: from_entity
-      entity: numero_utente
+      entity: nr_utente
   data:
     type: any
     mappings:
     - type: from_entity
-      entity: data_dia
+      entity: data
   especialidade:
     type: any
     mappings:
@@ -55,9 +53,7 @@ responses:
   utter_especialidade:
   - text: Em que especialidade gostarias de agendar uma consulta?
   utter_data:
-  - text: Em que data gostarias de agendar uma consulta? Por favor, indica no seguinte formato dd/mm/yyyy
-  utter_confirmacao:
-  - text: A tua consulta está agendada para o {data_dia} de {data_mes} para a especialidade de {especialidade}. Correto?
+  - text: Em que data gostarias de agendar uma consulta? Por favor, indica no seguinte formato dd-mm-aaaa
   utter_preferencia:
   - text: Preferes que a tua consulta seja de manhã ou de tarde?
 session_config:
@@ -71,6 +67,5 @@ actions:
 - utter_especialidade
 - utter_preferencia
 - utter_data
-- utter_confirmacao
 - utter_despedida
 - agendar_consulta
