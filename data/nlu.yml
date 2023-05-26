@@ -18,11 +18,13 @@ nlu:
   examples: |
     - [Joana](nome)
     - [Mariana](nome)
+    - [Filipa](nome)
+    - [Ana](nome)
 - intent: nr_utente
   examples: |
     - [123456789](nr_utente)
     - [111111111](nr_utente)
-    - [123456789](nr_utente)
+    - [111111111](nr_utente)
 - intent: especialidade
   examples: |
     - [Ortopedia](especialidade)
@@ -31,13 +33,17 @@ nlu:
     - [Genecologista](especialidade)
     - [Oftalmologista](especialidade)
     - [Oftalmologia](especialidade)
+    - [Ortopedia](especialidade)
 - intent: data
   examples: |
     - [27-12-2023](data)
     - [27-06-2023](data)
     - [27-07-2023](data)
+    - [29-08-2023](data)
+    - [27-06-2023](data)
 - intent: preferencia
   examples: |
     - [tarde](preferencia)
     - [manha](preferencia)
     - [noite](preferencia)
+    - [tarde](preferencia)

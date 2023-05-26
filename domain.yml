@@ -11,10 +11,10 @@ intents:
 - saudacao
 entities:
 - data
-- nr_utente
-- nome
-- especialidade
 - preferencia
+- nome
+- nr_utente
+- especialidade
 slots:
   nome:
     type: any
@@ -60,12 +60,13 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 actions:
-- utter_questionar
 - agendar_consulta
 - utter_saudacao
 - utter_especialidade
 - utter_data
 - utter_numero_utente
+- utter_despedida
 - action_preferencia
 - utter_preferencia
-- utter_despedida
+- utter_questionar
+- cancelar_consulta

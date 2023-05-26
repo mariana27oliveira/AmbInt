@@ -19,9 +19,11 @@ stories:
   - intent: data
   - action: utter_preferencia
   - intent: preferencia
+  - action: action_preferencia
   - action: agendar_consulta
   - intent: despedida
   - action: utter_despedida
+
 
 
 
@@ -30,29 +32,76 @@ stories:
   steps:
   - intent: saudacao
   - action: utter_saudacao
+  - intent: saudacao
   - intent: nome
     entities:
-    - nome: Mariana
-  - slot_was_set:
-    - nome: Mariana
+    - nome: Filipa
   - action: utter_questionar
   - intent: consulta
   - action: utter_numero_utente
   - intent: nr_utente
     entities:
-    - nr_utente: '123456789'
+    - nr_utente: '111111111'
   - slot_was_set:
-    - nr_utente: '123456789'
+    - nr_utente: '111111111'
   - action: utter_especialidade
   - intent: especialidade
     entities:
-    - especialidade: oftalmologia
+    - especialidade: Ortopedia
   - slot_was_set:
-    - especialidade: oftalmologia
+    - especialidade: Ortopedia
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 29-08-2023
+  - slot_was_set:
+    - data: 29-08-2023
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: manha
+  - slot_was_set:
+    - preferencia: manha
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+- story: interactive_story_1
+  steps:
+  - intent: saudacao
+  - action: utter_saudacao
+  - intent: nome
+    entities:
+    - nome: Ana
+  - slot_was_set:
+    - nome: Ana
+  - action: utter_questionar
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '111111111'
+  - slot_was_set:
+    - nr_utente: '111111111'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Ortopedia
+  - slot_was_set:
+    - especialidade: Ortopedia
   - action: utter_data
   - intent: data
     entities:
     - data: 27-06-2023
   - slot_was_set:
     - data: 27-06-2023
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: tarde
+  - slot_was_set:
+    - preferencia: tarde
+  - action: action_preferencia
   - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
