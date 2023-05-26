@@ -16,35 +16,29 @@ nlu:
     - Quero marcar uma consulta
 - intent: nome
   examples: |
-    - [Mariana] (nome)
-    - [Joana] (nome)
+    - [Joana](nome)
     - [Mariana](nome)
-    - [Mariana](nome)
-- intent: numero_utente
+- intent: nr_utente
   examples: |
-    - [123456789] (nr_utente)
+    - [123456789](nr_utente)
+    - [111111111](nr_utente)
     - [123456789](nr_utente)
 - intent: especialidade
   examples: |
-    - Ortopedia
-    - Ortopedista
-    - Genecologia
-    - Genecologista
-    - Oftalmologista
-    - Oftalmologia
-    - [oftalmologia](especialidade)
+    - [Ortopedia](especialidade)
+    - [Ortopedista](especialidade)
+    - [Genecologia](especialidade)
+    - [Genecologista](especialidade)
+    - [Oftalmologista](especialidade)
+    - [Oftalmologia](especialidade)
 - intent: data
   examples: |
-    - 27/12/2023
-    - 26/05/2023
-    - 20/08/2023
+    - [27-12-2023](data)
+    - [27-06-2023](data)
+    - [27-07-2023](data)
 - intent: preferencia
   examples: |
     - [manhã](preferencia)
     - [tarde](preferencia)
     - [manha](preferencia)
     - [noite](preferencia)
-    - [manha](preferencia)
-- regex: nr_utente
-  examples: |
-    - \d{9}

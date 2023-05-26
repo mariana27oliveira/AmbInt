@@ -2,10 +2,6 @@ version: "3.1"
 
 stories:
 
- 
-
-
-
 
 
 - story: marcar consulta 
@@ -16,7 +12,7 @@ stories:
   - action: utter_questionar
   - intent: consulta
   - action: utter_numero_utente
-  - intent: numero_utente
+  - intent: nr_utente
   - action: utter_especialidade
   - intent: especialidade
   - action: utter_data
@@ -26,4 +22,33 @@ stories:
 
 
 
-
+- story: interactive_story_1
+  steps:
+  - intent: saudacao
+  - action: utter_saudacao
+  - intent: nome
+    entities:
+    - nome: Mariana
+  - slot_was_set:
+    - nome: Mariana
+  - action: utter_questionar
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '123456789'
+  - slot_was_set:
+    - nr_utente: '123456789'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: oftalmologia
+  - slot_was_set:
+    - especialidade: oftalmologia
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 27-06-2023
+  - slot_was_set:
+    - data: 27-06-2023
+  - action: agendar_consulta

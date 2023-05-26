@@ -3,18 +3,18 @@ intents:
 - confirmacao
 - consulta
 - data
-- especialidade
-- numero_utente
-- preferencia
-- nome
-- saudacao
 - despedida
+- especialidade
+- nome
+- nr_utente
+- preferencia
+- saudacao
 entities:
+- data
+- nr_utente
 - nome
 - especialidade
 - preferencia
-- nr_utente
-- data
 slots:
   nome:
     type: any
@@ -60,12 +60,12 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 actions:
-- utter_numero_utente
 - utter_questionar
-- action_preferencia
+- agendar_consulta
 - utter_saudacao
 - utter_especialidade
-- utter_preferencia
 - utter_data
+- utter_numero_utente
+- action_preferencia
+- utter_preferencia
 - utter_despedida
-- agendar_consulta

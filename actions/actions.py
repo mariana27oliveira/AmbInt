@@ -32,40 +32,12 @@ from rasa_sdk import Tracker, Action
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.types import DomainDict
 from rasa_sdk.events import SlotSet
-
+from datetime import datetime, timedelta
+import dateparser
+import pymongo
 
 ALLOWED_MANHA_TARDE = ['manha', 'tarde']
 
-'''
-class ValidateNameForm(Action):
-
-    def name(self) -> Text:
-        return "validate_name_form"
-
-    def validate_manha_tarde(
-          self,
-          slot_value: Any,
-          dispatcher: CollectingDispatcher,
-          tracker: Tracker,
-          domain: DomainDict,
-    ) -> Dict[Text, Any]:
-       """Validate 'manha_tarde' value."""
-       if slot_value.lower() not in ALLOWED_MANHA_TARDE:
-          dispatcher.utter_message(text=f"Só pode inserir: manha ou tarde")
-          return {"manha_tarde": slot_value}
-       dispatcher.utter_message(text=f"Ok! A Preferência é {slot_value}")
-       return {"manha_tarde": slot_value}
-'''
-
-
-from datetime import datetime, timedelta
-from typing import Any, Text, Dict, List
-
-import dateparser
-import pymongo
-from rasa_sdk import Action, Tracker
-from rasa_sdk.events import SlotSet
-from rasa_sdk.executor import CollectingDispatcher
 
 
 class AgendarConsultaAction(Action):
@@ -153,7 +125,7 @@ def validaData(self, data, dispatcher):
     else:
         # Caso a conversão da data tenha falhado
         mensagem = "Peço desculpa, não consegui entender a data fornecida. " \
-                   "Por favor, utilize por exemplo o formato dia/mês."
+                   "Por favor, utilize por exemplo o formato dd-mm-aaaa."
         dispatcher.utter_message(text=mensagem)
         return None
 
@@ -168,6 +140,9 @@ def fetch_connection(self):
     except:
         # Fechar a ligação
         client.close()
+
+
+
 
 
 
@@ -221,6 +196,8 @@ class CancelarConsultaAction(Action):
         if ocupado:
             return True
         return False
+
+
 
 
 
