@@ -1,0 +1,36 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-numero_utente",
+      "2": "I-numero_utente",
+      "3": "L-numero_utente",
+      "4": "U-numero_utente",
+      "5": "B-preferencia",
+      "6": "I-preferencia",
+      "7": "L-preferencia",
+      "8": "U-preferencia",
+      "9": "B-primeiro_nome",
+      "10": "I-primeiro_nome",
+      "11": "L-primeiro_nome",
+      "12": "U-primeiro_nome",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-numero_utente": 1,
+      "I-numero_utente": 2,
+      "L-numero_utente": 3,
+      "U-numero_utente": 4,
+      "B-preferencia": 5,
+      "I-preferencia": 6,
+      "L-preferencia": 7,
+      "U-preferencia": 8,
+      "B-primeiro_nome": 9,
+      "I-primeiro_nome": 10,
+      "L-primeiro_nome": 11,
+      "U-primeiro_nome": 12,
+      "O": 0
+    },
+    "num_tags": 13
+  }
+]
