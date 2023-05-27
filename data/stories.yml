@@ -10,6 +10,7 @@ stories:
   - intent: nr_utente
   - action: utter_especialidade
   - intent: especialidade
+  - action: valida_especialidade
   - action: utter_data
   - intent: data
   - action: utter_preferencia
@@ -18,6 +19,16 @@ stories:
   - action: agendar_consulta
   - intent: despedida
   - action: utter_despedida
+
+
+- story: especialidade 
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+  - action: utter_especialidade
+  - intent: especialidade
+  - action: valida_especialidade
 
 
 

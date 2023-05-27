@@ -103,3 +103,4 @@ actions:
 - action_reagendar_consulta
 - action_confirmar_reagendar_consulta
 - action_listar_disponibilidade
+- valida_especialidade
