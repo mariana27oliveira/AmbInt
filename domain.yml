@@ -1,21 +1,22 @@
 version: '3.1'
 intents:
+- cancelar
 - confirmacao
 - consulta
 - data
 - despedida
 - especialidade
+- listar_consultas
 - nome
 - nr_utente
 - preferencia
 - saudacao
-- listar_consultas
 entities:
-- data
-- preferencia
-- nome
-- nr_utente
 - especialidade
+- preferencia
+- data
+- nr_utente
+- nome
 slots:
   nome:
     type: any
@@ -59,18 +60,27 @@ responses:
   - text: Em que data gostarias de agendar uma consulta?
   utter_preferencia:
   - text: Preferes que a tua consulta seja de manhã ou de tarde?
+  utter_data_cancelamento:
+  - text: Em que data está marcada a consulta?
+  utter_especialidade_cancelar:
+  - text: De que especialidade é a consulta a desmarcar?
+  utter_cancelada:
+  - text: Ok {nome}! A consulta marcada na data {data} foi cancelada!
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 actions:
-- agendar_consulta
-- utter_saudacao
 - utter_especialidade
+- agendar_consulta
+- utter_despedida
 - utter_data
 - utter_numero_utente
-- utter_despedida
 - action_preferencia
 - utter_preferencia
-- utter_questionar
+- utter_data_cancelamento
 - cancelar_consulta
+- utter_especialidade_cancelar
+- utter_saudacao
+- utter_questionar
 - action_listar_consultas
+- utter_cancelada

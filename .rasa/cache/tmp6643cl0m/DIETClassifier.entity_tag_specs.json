@@ -1,0 +1,52 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-data",
+      "2": "I-data",
+      "3": "L-data",
+      "4": "U-data",
+      "5": "B-especialidade",
+      "6": "I-especialidade",
+      "7": "L-especialidade",
+      "8": "U-especialidade",
+      "9": "B-nome",
+      "10": "I-nome",
+      "11": "L-nome",
+      "12": "U-nome",
+      "13": "B-nr_utente",
+      "14": "I-nr_utente",
+      "15": "L-nr_utente",
+      "16": "U-nr_utente",
+      "17": "B-preferencia",
+      "18": "I-preferencia",
+      "19": "L-preferencia",
+      "20": "U-preferencia",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-data": 1,
+      "I-data": 2,
+      "L-data": 3,
+      "U-data": 4,
+      "B-especialidade": 5,
+      "I-especialidade": 6,
+      "L-especialidade": 7,
+      "U-especialidade": 8,
+      "B-nome": 9,
+      "I-nome": 10,
+      "L-nome": 11,
+      "U-nome": 12,
+      "B-nr_utente": 13,
+      "I-nr_utente": 14,
+      "L-nr_utente": 15,
+      "U-nr_utente": 16,
+      "B-preferencia": 17,
+      "I-preferencia": 18,
+      "L-preferencia": 19,
+      "U-preferencia": 20,
+      "O": 0
+    },
+    "num_tags": 21
+  }
+]

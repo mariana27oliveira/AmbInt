@@ -3,13 +3,8 @@ version: "3.1"
 stories:
 
 
-
 - story: marcar consulta 
   steps:
-  - intent: saudacao
-  - action: utter_saudacao
-  - intent: nome
-  - action: utter_questionar
   - intent: consulta
   - action: utter_numero_utente
   - intent: nr_utente
@@ -26,17 +21,8 @@ stories:
 
 
 
-
-
 - story: interactive_story_1
   steps:
-  - intent: saudacao
-  - action: utter_saudacao
-  - intent: saudacao
-  - intent: nome
-    entities:
-    - nome: Filipa
-  - action: utter_questionar
   - intent: consulta
   - action: utter_numero_utente
   - intent: nr_utente
@@ -66,16 +52,9 @@ stories:
   - intent: despedida
   - action: utter_despedida
 
+
 - story: interactive_story_1
   steps:
-  - intent: saudacao
-  - action: utter_saudacao
-  - intent: nome
-    entities:
-    - nome: Ana
-  - slot_was_set:
-    - nome: Ana
-  - action: utter_questionar
   - intent: consulta
   - action: utter_numero_utente
   - intent: nr_utente
@@ -109,14 +88,6 @@ stories:
 
 - story: Listar Consultas
   steps:
-  - intent: saudacao
-  - action: utter_saudacao
-  - intent: nome
-    entities:
-    - nome: Maria
-  - slot_was_set:
-    - nome: Maria
-  - action: utter_questionar
   - intent: listar_consultas
   - action: utter_ask_nr_utente
   - intent: nr_utente
@@ -125,5 +96,89 @@ stories:
   - slot_was_set:
     - nr_utente: '190054321'
   - action: action_listar_consultas
+  - intent: despedida
+  - action: utter_despedida
+
+
+- story: cancelar_consulta
+  steps:
+  - intent: cancelar 
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '123456789'
+  - slot_was_set:
+    - nr_utente: '123456789'
+  - action: utter_especialidade_cancelar
+  - intent: especialidade
+    entities:
+    - especialidade: oftalmologia
+  - slot_was_set:
+    - especialidade: oftalmologia
+  - action: utter_data_cancelamento
+  - intent: data
+    entities:
+    - data: 27-06-2023
+  - slot_was_set:
+    - data: 27-06-2023
+  - action: cancelar_consulta
+
+
+
+- story: interactive_story_1
+  steps:
+  - intent: cancelar
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '789789789'
+  - slot_was_set:
+    - nr_utente: '789789789'
+  - action: utter_especialidade_cancelar
+  - intent: especialidade
+    entities:
+    - especialidade: Oftalmologia
+  - slot_was_set:
+    - especialidade: Oftalmologia
+  - action: utter_data_cancelamento
+  - intent: data
+    entities:
+    - data: 27-05-2023
+  - slot_was_set:
+    - data: 27-05-2023
+  - action: cancelar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+
+- story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '123456789'
+  - slot_was_set:
+    - nr_utente: '123456789'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Oftalmologia
+  - slot_was_set:
+    - especialidade: Oftalmologia
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 20-04-2024
+  - slot_was_set:
+    - data: 20-04-2024
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: manha
+  - slot_was_set:
+    - preferencia: manha
+  - action: action_preferencia
+  - action: agendar_consulta
   - intent: despedida
   - action: utter_despedida

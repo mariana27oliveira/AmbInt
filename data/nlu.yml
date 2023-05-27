@@ -14,6 +14,7 @@ nlu:
 - intent: consulta
   examples: |
     - Quero marcar uma consulta
+    - quero marcar uma consulta
 - intent: listar_consultas
   examples: |
     - quais são as minhas consultas?
@@ -29,12 +30,13 @@ nlu:
     - [Mariana](nome)
     - [Filipa](nome)
     - [Ana](nome)
+    - [joana]{"entity": "nome", "value": "Joana"}
 - intent: nr_utente
   examples: |
     - [123456789](nr_utente)
     - [111111111](nr_utente)
-    - [111111111](nr_utente)
     - [190054321](nr_utente)
+    - [123456789](nr_utente)
 - intent: especialidade
   examples: |
     - [Ortopedia](especialidade)
@@ -43,18 +45,18 @@ nlu:
     - [Genecologista](especialidade)
     - [Oftalmologista](especialidade)
     - [Oftalmologia](especialidade)
-    - [Ortopedia](especialidade)
     - [Psicologia](especialidade)
     - [Pediatria](especialidade)
     - [Dermatologia](especialidade)
     - [Cardiologia](especialidade)
+    - [oftalmologia]{"entity": "especialidade", "value": "Oftalmologia"}
+    - [oftalmologia]{"entity": "especialidade", "value": "Oftalmologia"}
 - intent: data
   examples: |
     - [27-12-2023](data)
     - [27-06-2023](data)
     - [27-07-2023](data)
     - [29-08-2023](data)
-    - [27-06-2023](data)
     - [amanhã](data)
     - [próximo mês](data)
     - [próxima semana](data)
@@ -63,9 +65,22 @@ nlu:
     - [27/05/2023](data)
     - [27/06](data)
     - [27-06](data)
+    - [28-05-2023](data)
+    - [30-05-2023](data)
+    - [20-04-2024](data)
 - intent: preferencia
   examples: |
     - [tarde](preferencia)
     - [manha](preferencia)
     - [noite](preferencia)
-    - [tarde](preferencia)
+    - [manha](preferencia)
+- intent: cancelar
+  examples: |
+    - quero cancelar uma consulta
+    - cancelar consulta
+- synonym: Joana
+  examples: |
+    - joana
+- synonym: Oftalmologia
+  examples: |
+    - oftalmologia

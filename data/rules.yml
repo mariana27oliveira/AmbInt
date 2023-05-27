@@ -2,4 +2,15 @@ version: "3.1"
 
 rules:
 
-
+- rule: cumprimentar
+  steps:
+    - intent: saudacao
+    - action: utter_saudacao
+- rule: depois do nome 
+  steps:
+    - intent: nome
+      entities:
+      - nome: Mariana
+    - slot_was_set:
+      - nome: Mariana
+    - action: utter_questionar
