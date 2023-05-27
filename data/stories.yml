@@ -182,3 +182,60 @@ stories:
   - action: agendar_consulta
   - intent: despedida
   - action: utter_despedida
+
+- story: Reagendar Consulta
+  steps:
+  - intent: saudacao
+  - action: utter_saudacao
+  - intent: nome
+    entities:
+    - nome: Maria
+  - slot_was_set:
+    - nome: Maria
+  - action: utter_questionar
+  - intent: reagendar_consulta
+    entities:
+    - data: 27 de maio
+    - nova_data: 27/06
+    - preferencia: tarde
+  - slot_was_set:
+    - data: 27 de maio
+  - slot_was_set:
+    - preferencia: tarde
+  - slot_was_set:
+    - nova_data: 27/06
+  - action: utter_ask_nr_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '190054321'
+  - slot_was_set:
+    - nr_utente: '190054321'
+  - action: action_confirmar_reagendar_consulta
+  - slot_was_set:
+    - nova_data: 27-06-2023
+  - slot_was_set:
+    - hora: 14:00
+  - slot_was_set:
+    - especialidade: Cardiologia
+  - intent: aceitar
+  - action: action_reagendar_consulta
+  - slot_was_set:
+    - data: null
+  - slot_was_set:
+    - nova_data: null
+  - slot_was_set:
+    - hora: null
+  - slot_was_set:
+    - especialidade: null
+  - slot_was_set:
+    - preferencia: null
+  - intent: negar
+  - action: action_listar_disponibilidade
+  - intent: escolher_horario
+    entities:
+      - hora: "10:00"
+  - slot_was_set:
+      - hora: "10:00"
+  - action: action_reagendar_consulta
+  - intent: despedida
+  - action: utter_despedida

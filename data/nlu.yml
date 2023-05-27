@@ -1,5 +1,16 @@
 version: "3.1"
 nlu:
+- intent: aceitar
+  examples: |
+    - sim
+    - s
+    - pode ser
+- intent: negar
+  examples: |
+    - não
+    - n
+    - acho que não
+    - não é necessário
 - intent: saudacao
   examples: |
     - Olá
@@ -24,6 +35,20 @@ nlu:
     - quero saber quais são as minhas consultas
     - lista das minhas consultas
     - próximas consultas
+- intent: reagendar_consulta
+  examples: |
+    - quero reagendar a consulta do dia [27 de maio](data) para o [próximo mês](nova_data) à [tarde](preferencia)
+    - reagendar a minha consulta do dia [27 de maio](data) para o [27/06](nova_data) de [tarde](preferencia)
+    - reagendar a consulta do dia [27/06](data) para a [próxima semana](nova_data) de [manhã](preferencia)
+    - remarcar a consulta do dia [27/06](data) para a [próxima semana](nova_data) de [manhã](preferencia)
+    - quero reagendar a minha consulta do dia [27 de maio](data) para o [próximo mês](nova_data) de [manhã](preferencia)
+    - quero reagendar a consulta do dia [27 de maio](data) para o dia [27/06](nova_data) à [tarde](preferencia)
+- intent: escolher_horario
+  examples: |
+    - marca dia [27 de junho](nova_data) às [17:00](hora)
+    - quero no dia [27 de junho](nova_data) às [17:30](hora)
+    - marca para dia [27/06](nova_data) às [12:00](hora)
+    - pode ser no dia [27-06](nova_data) às [12:00](hora)
 - intent: nome
   examples: |
     - [Joana](nome)
@@ -31,12 +56,12 @@ nlu:
     - [Filipa](nome)
     - [Ana](nome)
     - [joana]{"entity": "nome", "value": "Joana"}
+    - [Maria](nome)
 - intent: nr_utente
   examples: |
     - [123456789](nr_utente)
     - [111111111](nr_utente)
     - [190054321](nr_utente)
-    - [123456789](nr_utente)
 - intent: especialidade
   examples: |
     - [Ortopedia](especialidade)
@@ -49,7 +74,6 @@ nlu:
     - [Pediatria](especialidade)
     - [Dermatologia](especialidade)
     - [Cardiologia](especialidade)
-    - [oftalmologia]{"entity": "especialidade", "value": "Oftalmologia"}
     - [oftalmologia]{"entity": "especialidade", "value": "Oftalmologia"}
 - intent: data
   examples: |
@@ -73,7 +97,6 @@ nlu:
     - [tarde](preferencia)
     - [manha](preferencia)
     - [noite](preferencia)
-    - [manha](preferencia)
 - intent: cancelar
   examples: |
     - quero cancelar uma consulta
