@@ -63,7 +63,7 @@ responses:
   utter_saudacao:
   - text: Olá! Sou o chatbot responsável pelo agendamento de consultas na Clínica Saúde Total. Como te chamas?
   utter_despedida:
-  - text: Até breve {nome} \U0001F609! Foi um prazer ajudar.
+  - text: Até breve {nome}! Foi um prazer ajudar.
   utter_questionar:
   - text: Bem-vindo(a) à nossa clinica {nome}! Em que posso ajudar?
   utter_numero_utente:
