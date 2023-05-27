@@ -16,25 +16,26 @@ nlu:
     - Olá
     - Bom dia
     - Boa tarde
-    - ola
 - intent: despedida
   examples: |
-    - xau
-    - adeus
-    - obrigada
+    - Adeus
+    - Obrigada!
+    - Adeus. Obrigada.
 - intent: consulta
   examples: |
+    - Gostava de marcar uma consulta
     - Quero marcar uma consulta
-    - quero marcar uma consulta
+    - Agendar consulta
+    - Marcar consulta
 - intent: listar_consultas
   examples: |
-    - quais são as minhas consultas?
-    - que consultas tenho agendadas
-    - listar consultas
-    - listar as minhas consultas
-    - quero saber quais são as minhas consultas
-    - lista das minhas consultas
-    - próximas consultas
+    - Quais são as minhas consultas?
+    - Que consultas tenho agendadas?
+    - Listar consultas
+    - Listar as minhas consultas
+    - Quero saber quais são as minhas consultas
+    - Lista das minhas consultas
+    - Próximas consultas
 - intent: reagendar_consulta
   examples: |
     - quero reagendar a consulta do dia [27 de maio](data) para o [próximo mês](nova_data) à [tarde](preferencia)
@@ -74,6 +75,7 @@ nlu:
     - [Pediatria](especialidade)
     - [Dermatologia](especialidade)
     - [Cardiologia](especialidade)
+    - [Psiquiatria](especialidade)
     - [oftalmologia]{"entity": "especialidade", "value": "Oftalmologia"}
 - intent: data
   examples: |
@@ -95,15 +97,20 @@ nlu:
 - intent: preferencia
   examples: |
     - [tarde](preferencia)
-    - [manha](preferencia)
+    - [manhã](preferencia)
     - [noite](preferencia)
+    - [manhã](preferencia)
 - intent: cancelar
   examples: |
-    - quero cancelar uma consulta
-    - cancelar consulta
+    - Quero cancelar uma consulta
+    - Gostava de cancelar uma consulta
+    - Cancelar consulta
+    - Eliminar consulta
 - synonym: Joana
   examples: |
     - joana
 - synonym: Oftalmologia
   examples: |
     - oftalmologia
+    - oftalmologista
+    - Oftalmologista

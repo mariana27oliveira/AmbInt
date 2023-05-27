@@ -14,3 +14,13 @@ rules:
     - slot_was_set:
       - nome: Mariana
     - action: utter_questionar
+
+- rule: depois da especialidade 
+  steps:
+    - intent: especialidade
+      entities:
+      - nome: Pediatria
+    - slot_was_set:
+      - nome: Pediatria
+    - action: valida_especialidade
+

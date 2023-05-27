@@ -70,9 +70,6 @@ class AgendarConsultaAction(Action):
         numero_utente = tracker.get_slot(SLOT_UTENTE)
         turno = tracker.get_slot(SLOT_TURNO)
 
-        valida = valida_especialidade(self, especialidade, dispatcher)
-        if not valida:
-            return [SlotSet(SLOT_ESPECICALIDADE, None)]
 
         parsed_date = valida_data(self, data, dispatcher)
         if parsed_date is None:
@@ -202,15 +199,22 @@ def valida_data(self, data, dispatcher):
         return None
 
 
-def valida_especialidade(self, especialidade, dispatcher):
-    if especialidade not in ESPECIALIDADE:
-        mensagem = f"Lamento, mas não temos a especialidade [{especialidade}] na Clínica Saúde Total. " \
+class ValidaEspecialidade(Action):
+    def name(self) -> Text:
+        return "valida_especialidade"
+    
+    def run (self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        especialidade = tracker.get_slot(SLOT_ESPECICALIDADE)
+
+        if especialidade not in ESPECIALIDADE:
+            mensagem = f"Lamento, mas não temos a especialidade [{especialidade}] na Clínica Saúde Total. " \
                    f"Dispomos apenas das seguintes especialidades médicas: \t\n" + \
                    "\n\t".join(ESPECIALIDADE) + "\nQual das especialidades pretende?"
-        dispatcher.utter_message(text=mensagem)
-        return False
-    return True
-
+            dispatcher.utter_message(text=mensagem)
+            return [SlotSet("especialidade", None)]
+        else:
+            dispatcher.utter_message(text=f"A especialidade é {especialidade}")
+            return []
 
 class CancelarConsultaAction(Action):
     def name(self) -> Text:
@@ -468,3 +472,22 @@ class ActionListarDisponibilidade(Action):
             return [SlotSet(SLOT_NOVA_DATA, None), SlotSet(SLOT_HORA, None)]
         finally:
             client.close()
+
+'''
+def valida_especialidade(self, especialidade, dispatcher):
+    if especialidade not in ESPECIALIDADE:
+        mensagem = f"Lamento, mas não temos a especialidade [{especialidade}] na Clínica Saúde Total. " \
+                   f"Dispomos apenas das seguintes especialidades médicas: \t\n" + \
+                   "\n\t".join(ESPECIALIDADE) + "\nQual das especialidades pretende?"
+        dispatcher.utter_message(text=mensagem)
+        return False
+    return True
+
+
+
+valida = valida_especialidade(self, especialidade, dispatcher)
+        if not valida:
+            return [SlotSet(SLOT_ESPECICALIDADE, None)]    
+
+
+'''

@@ -239,3 +239,137 @@ stories:
   - action: action_reagendar_consulta
   - intent: despedida
   - action: utter_despedida
+
+
+  
+- story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '123456789'
+  - slot_was_set:
+    - nr_utente: '123456789'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Oftalmologia
+  - slot_was_set:
+    - especialidade: Oftalmologia
+  - action: valida_especialidade
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 06-06-2023
+  - slot_was_set:
+    - data: 06-06-2023
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: tarde
+  - slot_was_set:
+    - preferencia: tarde
+  - action: action_preferencia
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+  - story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '111111111'
+  - slot_was_set:
+    - nr_utente: '111111111'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Pediatria
+  - slot_was_set:
+    - especialidade: Pediatria
+  - action: valida_especialidade
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 07-06-2023
+  - slot_was_set:
+    - data: 07-06-2023
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: tarde
+  - slot_was_set:
+    - preferencia: tarde
+  - action: action_preferencia
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+  - story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '123456789'
+  - slot_was_set:
+    - nr_utente: '123456789'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Pediatria
+  - slot_was_set:
+    - especialidade: Pediatria
+  - action: valida_especialidade
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 07-06-2023
+  - slot_was_set:
+    - data: 07-06-2023
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: tarde
+  - slot_was_set:
+    - preferencia: tarde
+  - action: action_preferencia
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+  - story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '111111111'
+  - slot_was_set:
+    - nr_utente: '111111111'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Psicologia
+  - slot_was_set:
+    - especialidade: Psicologia
+  - action: valida_especialidade
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 06-06-2023
+  - slot_was_set:
+    - data: 06-06-2023
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: manhã
+  - slot_was_set:
+    - preferencia: manhã
+  - action: action_preferencia
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
