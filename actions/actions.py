@@ -44,6 +44,7 @@ SLOT_ESPECICALIDADE = "especialidade"
 SLOT_UTENTE = "nr_utente"
 SLOT_DATA = "data"
 SLOT_NOVA_DATA = "nova_data"
+SLOT_HORA = "hora"
 SLOT_TURNO = "preferencia"
 
 DBNAME = "ClinicaSaudeTotal"
@@ -218,12 +219,7 @@ class CancelarConsultaAction(Action):
             marcacao = get_marcacao_do_utente(parsed_date, especialidade, numero_utente, db)
             if marcacao:
                 # remover marcação
-                consulta = {
-                    "especialidade": especialidade,
-                    "data": parsed_date,
-                    "numero_utente": numero_utente
-                }
-                db[AGENDA].remove(consulta)
+                remover_consulta(db, especialidade, numero_utente, parsed_date)
                 # Mensagem de resposta
                 hora = marcacao["hora"]
                 mensagem = f"{nome}, a sua consulta de {especialidade} marcada para o dia {parsed_date} às {hora} foi cancelada."
@@ -242,7 +238,16 @@ class CancelarConsultaAction(Action):
         return [SlotSet(SLOT_ESPECICALIDADE, None)]
 
 
-def get_marcacao_do_utente(self, data, especialidade, numero_utente, db):
+def remover_consulta(db, especialidade, numero_utente, parsed_date):
+    consulta = {
+        "especialidade": especialidade,
+        "data": parsed_date,
+        "numero_utente": numero_utente
+    }
+    db[AGENDA].remove(consulta)
+
+
+def get_marcacao_do_utente(data, especialidade, numero_utente, db):
     # Verificar se existe algum registo para o utente no dia referiado
     marcacao = db[AGENDA].find_one(
         {"data": data, "especialidade": especialidade, "numero_utente": numero_utente})
@@ -336,6 +341,7 @@ class ConfirmarReagendarConsultaAction(Action):
         return "action_confirmar_reagendar_consulta"
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        nome = tracker.get_slot(SLOT_NOME)
         numero_utente = tracker.get_slot(SLOT_UTENTE)
         data = tracker.get_slot(SLOT_DATA)
         nova_data = tracker.get_slot(SLOT_NOVA_DATA)
@@ -357,7 +363,7 @@ class ConfirmarReagendarConsultaAction(Action):
                 especialidade = marcacao["especialidade"]
                 hora = procura_horario_livre(self, new_parsed_date, especialidade, turno, db)
 
-                mensagem = f"Tenho uma vaga disponivel para {especialidade} às {hora} no dia {new_parsed_date}. Quer remarcar a consulta?"
+                mensagem = f"Com certeza {nome}! \nEstive a verificar e tenho uma vaga a disponível para uma consulta de {especialidade} no dia {new_parsed_date} às {hora}. \nDeseja fazer a remarcação da consulta?"
                 dispatcher.utter_message(text=mensagem)
                 # Atualizar os slots com a nova data e horário
                 return [
@@ -365,7 +371,7 @@ class ConfirmarReagendarConsultaAction(Action):
                     SlotSet("hora", hora),
                     SlotSet(SLOT_ESPECICALIDADE, especialidade)]
             else:
-                mensagem = f"Não existe nenhuma marcação para si no dia {parsed_date}. Pode repetir a data da sua marcação?"
+                mensagem = f"Peço desculpa {nome}, não encontrei nenhuma marcação para si no dia {parsed_date}. Pode repetir a data da sua marcação?"
                 dispatcher.utter_message(text=mensagem)
                 return [SlotSet(SLOT_DATA, None)]
         finally:
@@ -377,19 +383,27 @@ class ReagendarConsultaAction(Action):
         return "action_reagendar_consulta"
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        nome = tracker.get_slot(SLOT_NOME)
         numero_utente = tracker.get_slot(SLOT_UTENTE)
+        data = tracker.get_slot(SLOT_DATA)
         nova_data = tracker.get_slot(SLOT_NOVA_DATA)
         hora = tracker.get_slot("hora")
         especialidade = tracker.get_slot(SLOT_ESPECICALIDADE)
 
+        parsed_date = valida_data(self, data, dispatcher)
+        if data is None:
+            return [SlotSet(SLOT_DATA, None)]
         new_parsed_date = valida_data(self, nova_data, dispatcher)
         if new_parsed_date is None:
             return [SlotSet(SLOT_NOVA_DATA, None)]
 
         client, db = fetch_connection()
         try:
-            consulta = agendar_consulta(db, new_parsed_date, hora, numero_utente, especialidade)
-            mensagem = f"A sua consulta de {especialidade} foi então reagendada para o dia {new_parsed_date} às {hora}."
+            # agendar nova
+            agendar_consulta(db, new_parsed_date, hora, numero_utente, especialidade)
+            # remover antiga
+            remover_consulta(db, especialidade, numero_utente, parsed_date)
+            mensagem = f"Muito bem {nome}! \nConforme o seu pedido, a sua consulta de {especialidade} foi então reagendada para o dia {new_parsed_date} às {hora}.\nPosso ajudar em mais alguma coisa?"
             dispatcher.utter_message(text=mensagem)
             return [SlotSet(SLOT_NOVA_DATA, None), SlotSet("hora", None), SlotSet(SLOT_ESPECICALIDADE, None)]
 
