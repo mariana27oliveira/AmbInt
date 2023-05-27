@@ -63,6 +63,7 @@ nlu:
     - [123456789](nr_utente)
     - [111111111](nr_utente)
     - [190054321](nr_utente)
+    - [111111111](nr_utente)
 - intent: especialidade
   examples: |
     - [Ortopedia](especialidade)
@@ -77,6 +78,7 @@ nlu:
     - [Cardiologia](especialidade)
     - [Psiquiatria](especialidade)
     - [oftalmologia]{"entity": "especialidade", "value": "Oftalmologia"}
+    - [Pediatria](especialidade)
 - intent: data
   examples: |
     - [27-12-2023](data)
@@ -99,7 +101,6 @@ nlu:
     - [tarde](preferencia)
     - [manhã](preferencia)
     - [noite](preferencia)
-    - [manhã](preferencia)
 - intent: cancelar
   examples: |
     - Quero cancelar uma consulta

@@ -253,3 +253,20 @@ stories:
 
 
   
+
+- story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '111111111'
+  - slot_was_set:
+    - nr_utente: '111111111'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Pediatria
+  - slot_was_set:
+    - especialidade: Pediatria
+  - action: valida_especialidade

@@ -1,25 +1,25 @@
 version: '3.1'
 intents:
+- aceitar
 - cancelar
 - confirmacao
 - consulta
 - data
 - despedida
+- escolher_horario
 - especialidade
 - listar_consultas
+- negar
 - nome
 - nr_utente
 - preferencia
-- saudacao
 - reagendar_consulta
-- escolher_horario
-- aceitar
-- negar
+- saudacao
 entities:
 - especialidade
+- nr_utente
 - preferencia
 - data
-- nr_utente
 - nome
 - nova_data
 - hora
@@ -86,11 +86,12 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 actions:
+- valida_especialidade
+- utter_numero_utente
 - utter_especialidade
 - agendar_consulta
 - utter_despedida
 - utter_data
-- utter_numero_utente
 - action_preferencia
 - utter_preferencia
 - utter_data_cancelamento
@@ -103,4 +104,3 @@ actions:
 - action_reagendar_consulta
 - action_confirmar_reagendar_consulta
 - action_listar_disponibilidade
-- valida_especialidade
