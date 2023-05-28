@@ -38,7 +38,7 @@ nlu:
     - Próximas consultas
 - intent: reagendar_consulta
   examples: |
-    - Quero reagendar a consulta do dia [27 de maio](data) para o [próximo mês](nova_data) à [tarde](preferencia)
+    - Quero reagendar a consulta do dia [30 de maio](data) para o [próximo mês](nova_data) à [tarde](preferencia)
     - Reagendar a minha consulta do dia [27 de maio](data) para o [27/06](nova_data) de [tarde](preferencia)
     - Reagendar a consulta do dia [27/06](data) para a [próxima semana](nova_data) de [manhã](preferencia)
     - Remarcar a consulta do dia [27/06](data) para a [próxima semana](nova_data) de [manhã](preferencia)
@@ -48,8 +48,9 @@ nlu:
   examples: |
     - Dia [27 de junho](nova_data) às [17:00](hora)
     - Quero no dia [27 de junho](nova_data) às [17:30](hora)
-    - Para dia [27/06](nova_data) às [12:00](hora)
+    - Marca para dia [27/06](nova_data) às [12:00](hora)
     - Pode ser no dia [27-06](nova_data) às [12:00](hora)
+    - Dia [04 de julho](nova_data) às [09:00](hora)
 - intent: nome
   examples: |
     - [Joana](nome)
