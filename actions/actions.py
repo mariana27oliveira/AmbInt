@@ -70,15 +70,13 @@ class AgendarConsultaAction(Action):
         numero_utente = tracker.get_slot(SLOT_UTENTE)
         turno = tracker.get_slot(SLOT_TURNO)
 
-
         valida = valida_especialidade(self, especialidade, dispatcher)
         if not valida:
-            return [SlotSet(SLOT_ESPECICALIDADE, None)]    
-        
+            return [SlotSet(SLOT_ESPECICALIDADE, None)]
+
         validap = valida_preferencia(self, turno, dispatcher)
         if not validap:
-            return [SlotSet(SLOT_TURNO, None)]  
-
+            return [SlotSet(SLOT_TURNO, None)]
 
         parsed_date = valida_data(self, data, dispatcher)
         if parsed_date is None:
@@ -219,7 +217,6 @@ def valida_data(self, data, dispatcher):
         return None
 
 
-             
 def valida_especialidade(self, especialidade, dispatcher):
     if especialidade not in ESPECIALIDADE:
         mensagem = f"Lamento, mas não temos a especialidade {especialidade} na Clínica Saúde Total. " \
@@ -228,6 +225,7 @@ def valida_especialidade(self, especialidade, dispatcher):
         dispatcher.utter_message(text=mensagem)
         return False
     return True
+
 
 def valida_preferencia(self, turno, dispatcher):
     if turno not in ['manhã', 'tarde']:
@@ -249,6 +247,7 @@ class ActionPreferencia(Action):
         else:
             dispatcher.utter_message(text=f"Preferência: {preferencia}")
             return []
+
 
 class CancelarConsultaAction(Action):
     def name(self) -> Text:
@@ -333,7 +332,6 @@ def fetch_connection():
         client.close()
 
 
-
 class ListarConsultasAction(Action):
     def name(self) -> Text:
         return "action_listar_consultas"
@@ -343,7 +341,9 @@ class ListarConsultasAction(Action):
 
         client, db = fetch_connection()
         try:
-            consultas = list(db[AGENDA].find({"numero_utente": numero_utente}).sort("data", 1))
+            data_atual = datetime.now().strftime("%d-%m-%Y")
+            consultas = list(db[AGENDA].find(
+                {"numero_utente": numero_utente, "data": {"$gte": data_atual}}).sort("data", 1))
 
             if len(consultas) == 0:
                 dispatcher.utter_message("Neste momento não tem consultas agendadas. O que pretende fazer?")
