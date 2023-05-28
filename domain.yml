@@ -16,13 +16,13 @@ intents:
 - reagendar_consulta
 - saudacao
 entities:
+- preferencia
+- hora
+- nova_data
+- nr_utente
 - data
 - especialidade
-- nr_utente
-- preferencia
 - nome
-- nova_data
-- hora
 slots:
   nome:
     type: any
@@ -65,7 +65,7 @@ responses:
   utter_despedida:
   - text: Até breve {nome}! Foi um gosto ajudar.
   utter_questionar:
-  - text: Bem-vindo(a) à nossa clinica, {nome}! Em que posso ajudar?
+  - text: Bem-vindo(a) à nossa Clinica, {nome}! Em que posso ajudar?
   utter_numero_utente:
   - text: Por favor, indique o seu número de utente.
   utter_ask_nr_utente:
@@ -77,7 +77,7 @@ responses:
   utter_preferencia:
   - text: Tem preferência pelo horário da manhã ou de tarde?
   utter_data_cancelamento:
-  - text: Indique a data atual da consulta, por favor. 
+  - text: Indique a data atual da consulta, por favor.
   utter_especialidade_cancelar:
   - text: De que especialidade é a consulta a desmarcar?
   utter_cancelada:
@@ -86,11 +86,15 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 actions:
+- action_reagendar_consulta
+- action_listar_disponibilidade
+- utter_despedida
+- utter_ask_nr_utente
+- action_confirmar_reagendar_consulta
 - utter_preferencia
 - action_preferencia
 - utter_numero_utente
 - utter_especialidade
-- utter_despedida
 - agendar_consulta
 - utter_data
 - valida_especialidade
@@ -101,6 +105,3 @@ actions:
 - utter_questionar
 - action_listar_consultas
 - utter_cancelada
-- action_reagendar_consulta
-- action_confirmar_reagendar_consulta
-- action_listar_disponibilidade

@@ -404,7 +404,7 @@ class ConfirmarReagendarConsultaAction(Action):
                 especialidade = marcacao["especialidade"]
                 hora = procura_horario_livre(self, new_parsed_date, especialidade, turno, db)
 
-                mensagem = f"Com certeza {nome}! \nEstive a verificar e tenho uma vaga disponível para uma consulta de {especialidade} no dia {new_parsed_date} às {hora}. \nDeseja fazer a remarcação da consulta?"
+                mensagem = f"Com certeza {nome}! \nEstive a verificar e existe uma vaga disponível para uma consulta de {especialidade} no dia {new_parsed_date} às {hora}. \nDeseja fazer a remarcação da consulta?"
                 dispatcher.utter_message(text=mensagem)
                 # Atualizar os slots com a nova data e horário
                 return [

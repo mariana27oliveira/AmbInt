@@ -1,6 +1,0 @@
-[
-  {
-    "name": "nr_utente",
-    "pattern": "\\d{9}"
-  }
-]

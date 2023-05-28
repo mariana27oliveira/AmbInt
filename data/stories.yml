@@ -95,32 +95,46 @@ stories:
   - intent: despedida
   - action: utter_despedida
 
-- story: Reagendar consulta acceitar
+- story: reagendar consulta aceitar
+  steps:
+  - intent: reagendar_consulta
+  - action: utter_ask_nr_utente
+  - intent: nr_utente
+  - action: action_confirmar_reagendar_consulta
+  - intent: aceitar
+  - action: action_reagendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+
+
+
+- story: interactive_story_1
   steps:
   - intent: reagendar_consulta
     entities:
-    - data: 27 de maio
-    - nova_data: 27/06
+    - data: 30 de maio
+    - nova_data: próximo mês
     - preferencia: tarde
   - slot_was_set:
-    - data: 27 de maio
+    - data: 30 de maio
   - slot_was_set:
     - preferencia: tarde
   - slot_was_set:
-    - nova_data: 27/06
+    - nova_data: próximo mês
   - action: utter_ask_nr_utente
   - intent: nr_utente
     entities:
-    - nr_utente: '190054321'
+    - nr_utente: '190765438'
   - slot_was_set:
-    - nr_utente: '190054321'
+    - nr_utente: '190765438'
   - action: action_confirmar_reagendar_consulta
   - slot_was_set:
-    - nova_data: 27-06-2023
+    - nova_data: 28-06-2023
   - slot_was_set:
     - hora: 14:00
   - slot_was_set:
-    - especialidade: Cardiologia
+    - especialidade: Ortopedia
   - intent: aceitar
   - action: action_reagendar_consulta
   - slot_was_set:
@@ -133,13 +147,77 @@ stories:
     - especialidade: null
   - slot_was_set:
     - preferencia: null
+  - intent: despedida
+  - action: utter_despedida
+
+
+
+
+- story: Reagendar consulta negar
+  steps:
+  - intent: reagendar_consulta
+  - action: utter_ask_nr_utente
+  - intent: nr_utente
+  - action: action_confirmar_reagendar_consulta
   - intent: negar
   - action: action_listar_disponibilidade
+  - intent: escolher_horário
+  - action: action_reagendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+
+ 
+- story: interactive_story_1
+  steps:
+  - intent: reagendar_consulta
+    entities:
+    - data: 30 de maio
+    - nova_data: próximo mês
+    - preferencia: tarde
+  - slot_was_set:
+    - data: 30 de maio
+  - slot_was_set:
+    - preferencia: tarde
+  - slot_was_set:
+    - nova_data: próximo mês
+  - action: utter_ask_nr_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '190123456'
+  - slot_was_set:
+    - nr_utente: '190123456'
+  - action: action_confirmar_reagendar_consulta
+  - slot_was_set:
+    - nova_data: 28-06-2023
+  - slot_was_set:
+    - hora: 14:00
+  - slot_was_set:
+    - especialidade: Dermatologia
+  - intent: negar
+  - action: action_listar_disponibilidade
+  - slot_was_set:
+    - nova_data: null
+  - slot_was_set:
+    - hora: null
   - intent: escolher_horario
     entities:
-      - hora: "10:00"
+    - nova_data: 28-06
+    - hora: 14:00
   - slot_was_set:
-      - hora: "10:00"
+    - nova_data: 28-06
+  - slot_was_set:
+    - hora: 14:00
   - action: action_reagendar_consulta
+  - slot_was_set:
+    - data: null
+  - slot_was_set:
+    - nova_data: null
+  - slot_was_set:
+    - hora: null
+  - slot_was_set:
+    - especialidade: null
+  - slot_was_set:
+    - preferencia: null
   - intent: despedida
   - action: utter_despedida

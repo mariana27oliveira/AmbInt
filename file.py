@@ -551,5 +551,94 @@ class ActionPreferencia(Action):
 
 
 
+  
+- story: Reagendar consulta aceitar
+  steps:
+  - intent: reagendar_consulta
+    entities:
+    - data: 27 de maio
+    - nova_data: 27/06
+    - preferencia: tarde
+  - slot_was_set:
+    - data: 27 de maio
+  - slot_was_set:
+    - preferencia: tarde
+  - slot_was_set:
+    - nova_data: 27/06
+  - action: utter_ask_nr_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '190054321'
+  - slot_was_set:
+    - nr_utente: '190054321'
+  - action: action_confirmar_reagendar_consulta
+  - slot_was_set:
+    - nova_data: 27-06-2023
+  - slot_was_set:
+    - hora: 14:00
+  - slot_was_set:
+    - especialidade: Cardiologia
+  - intent: aceitar
+  - action: action_reagendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+
+
+  - story: Reagendar Consulta negar
+  steps:
+  - intent: reagendar_consulta
+    entities:
+    - data: 30 de maio
+    - nova_data: próximo mês
+    - preferencia: manhã
+  - slot_was_set:
+    - data: 30 de maio
+  - slot_was_set:
+    - preferencia: manhã
+  - slot_was_set:
+    - nova_data: próximo mês
+  - action: utter_ask_nr_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '190054321'
+  - slot_was_set:
+    - nr_utente: '190054321'
+  - action: action_confirmar_reagendar_consulta
+  - slot_was_set:
+    - nova_data: 28-06-2023
+  - slot_was_set:
+    - hora: 09:30
+  - slot_was_set:
+    - especialidade: Cardiologia
+  - intent: negar
+  - action: action_listar_disponibilidade
+  - slot_was_set:
+    - nova_data: null
+  - slot_was_set:
+    - hora: null
+  - intent: escolher_horario
+    entities:
+      - hora: "10:00"
+    - nova_data: 04 de julho
+    - hora: 09:00
+  - slot_was_set:
+    - nova_data: 04 de julho
+  - slot_was_set:
+      - hora: "10:00"
+    - hora: 09:00
+  - action: action_reagendar_consulta
+  - slot_was_set:
+    - data: null
+  - slot_was_set:
+    - nova_data: null
+  - slot_was_set:
+    - hora: null
+  - slot_was_set:
+    - especialidade: null
+  - slot_was_set:
+    - preferencia: null
+  - intent: despedida
+  - action: utter_despedida
 
 '''
