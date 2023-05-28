@@ -118,6 +118,11 @@ def agendar_consulta(db, data, hora, numero_utente, especialidade):
 
 
 def procura_horario_livre(self, parsed_date, especialidade, turno, db):
+    hora, todos = procura_todos_horarios_livre(self, parsed_date, especialidade, turno, db)
+    return hora
+
+
+def procura_todos_horarios_livre(self, parsed_date, especialidade, turno, db, procura_todos=False):
     horarios = None
     if turno is None:
         horarios = horarios_clinica["manha"] + horarios_clinica["tarde"]
@@ -127,6 +132,7 @@ def procura_horario_livre(self, parsed_date, especialidade, turno, db):
         horarios = horarios_clinica["tarde"]
 
     proximo_horario_livre = None
+    todos = []
     for horario in horarios:
         agendamento = db[AGENDA].find_one(
             {
@@ -138,8 +144,11 @@ def procura_horario_livre(self, parsed_date, especialidade, turno, db):
         if agendamento is None:
             # Horário livre
             proximo_horario_livre = horario
-            break
-    return proximo_horario_livre
+            if (procura_todos):
+                todos.append(proximo_horario_livre)
+            else:
+                break
+    return proximo_horario_livre, todos
 
 
 def procura_dias_livres(self, data, especialidade, turno, db):
@@ -161,15 +170,17 @@ def procura_dias_livres(self, data, especialidade, turno, db):
 def procura_horarios_livres(self, data, especialidade, turno, db):
     horarios = []
     data_obj = datetime.strptime(data, "%d-%m-%Y")
-    data_obj += timedelta(days=1)
+    data_limite = data_obj + timedelta(days=15)
 
-    for _ in range(15):
-        hora = procura_horario_livre(self, data_obj.strftime("%d-%m-%Y"), especialidade, turno, db)
-        if hora:
-            data = formata_data(data_obj.strftime("%d-%m-%Y"))
-            horarios.append(f"- {data} às {hora}\n")
-            if len(horarios) == 7:
-                return horarios
+    while data_obj <= data_limite:
+        _, todos = procura_todos_horarios_livre(self, data_obj.strftime("%d-%m-%Y"), especialidade, turno, db,
+                                                procura_todos=True)
+        if todos:
+            for hora in todos:
+                data = formata_data(data_obj.strftime("%d-%m-%Y"))
+                horarios.append(f"- {data} às {hora}\n")
+                if len(horarios) == 7:
+                    return horarios
             data_obj += timedelta(days=1)
 
     return horarios
