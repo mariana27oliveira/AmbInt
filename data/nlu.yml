@@ -38,18 +38,18 @@ nlu:
     - Próximas consultas
 - intent: reagendar_consulta
   examples: |
-    - quero reagendar a consulta do dia [27 de maio](data) para o [próximo mês](nova_data) à [tarde](preferencia)
-    - reagendar a minha consulta do dia [27 de maio](data) para o [27/06](nova_data) de [tarde](preferencia)
-    - reagendar a consulta do dia [27/06](data) para a [próxima semana](nova_data) de [manhã](preferencia)
-    - remarcar a consulta do dia [27/06](data) para a [próxima semana](nova_data) de [manhã](preferencia)
-    - quero reagendar a minha consulta do dia [27 de maio](data) para o [próximo mês](nova_data) de [manhã](preferencia)
-    - quero reagendar a consulta do dia [27 de maio](data) para o dia [27/06](nova_data) à [tarde](preferencia)
+    - Quero reagendar a consulta do dia [27 de maio](data) para o [próximo mês](nova_data) à [tarde](preferencia)
+    - Reagendar a minha consulta do dia [27 de maio](data) para o [27/06](nova_data) de [tarde](preferencia)
+    - Reagendar a consulta do dia [27/06](data) para a [próxima semana](nova_data) de [manhã](preferencia)
+    - Remarcar a consulta do dia [27/06](data) para a [próxima semana](nova_data) de [manhã](preferencia)
+    - Quero reagendar a minha consulta do dia [27 de maio](data) para o [próximo mês](nova_data) de [manhã](preferencia)
+    - Quero reagendar a consulta do dia [27 de maio](data) para o dia [27/06](nova_data) à [tarde](preferencia)
 - intent: escolher_horario
   examples: |
-    - marca dia [27 de junho](nova_data) às [17:00](hora)
-    - quero no dia [27 de junho](nova_data) às [17:30](hora)
-    - marca para dia [27/06](nova_data) às [12:00](hora)
-    - pode ser no dia [27-06](nova_data) às [12:00](hora)
+    - Dia [27 de junho](nova_data) às [17:00](hora)
+    - Quero no dia [27 de junho](nova_data) às [17:30](hora)
+    - Para dia [27/06](nova_data) às [12:00](hora)
+    - Pode ser no dia [27-06](nova_data) às [12:00](hora)
 - intent: nome
   examples: |
     - [Joana](nome)
@@ -58,6 +58,8 @@ nlu:
     - [Ana](nome)
     - [joana]{"entity": "nome", "value": "Joana"}
     - [Maria](nome)
+    - [Francisca](nome)
+    - [Sofia](nome)
 - intent: nr_utente
   examples: |
     - [123456789](nr_utente)
@@ -67,10 +69,7 @@ nlu:
 - intent: especialidade
   examples: |
     - [Ortopedia](especialidade)
-    - [Ortopedista](especialidade)
-    - [Genecologia](especialidade)
-    - [Genecologista](especialidade)
-    - [Oftalmologista](especialidade)
+    - [Ginecologia](especialidade)
     - [Oftalmologia](especialidade)
     - [Psicologia](especialidade)
     - [Pediatria](especialidade)
@@ -78,7 +77,7 @@ nlu:
     - [Cardiologia](especialidade)
     - [Psiquiatria](especialidade)
     - [oftalmologia]{"entity": "especialidade", "value": "Oftalmologia"}
-    - [Pediatria](especialidade)
+    - [Psicologia](especialidade)
 - intent: data
   examples: |
     - [27-12-2023](data)
@@ -90,17 +89,21 @@ nlu:
     - [próxima semana](data)
     - [18 de maio](data)
     - [20 de Agosto](data)
+    - [09 de junho](data)
     - [27/05/2023](data)
     - [27/06](data)
     - [27-06](data)
     - [28-05-2023](data)
     - [30-05-2023](data)
     - [20-04-2024](data)
+    - [08-08-2023](data)
+    - [09-06-2023](data)
 - intent: preferencia
   examples: |
     - [tarde](preferencia)
     - [manhã](preferencia)
     - [noite](preferencia)
+    - [tarde](preferencia)
 - intent: cancelar
   examples: |
     - Quero cancelar uma consulta

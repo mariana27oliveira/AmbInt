@@ -54,7 +54,7 @@ ESPECIALIDADE = ['Cardiologia', 'Dermatologia', 'Ginecologia', 'Ortopedia',
                  'Oftalmologia', 'Pediatria', 'Psicologia', 'Fisioterapia']
 
 horarios_clinica = {
-    "manha": ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30"],
+    "manhã": ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30"],
     "tarde": ["14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00"]
 }
 
@@ -74,6 +74,10 @@ class AgendarConsultaAction(Action):
         valida = valida_especialidade(self, especialidade, dispatcher)
         if not valida:
             return [SlotSet(SLOT_ESPECICALIDADE, None)]    
+        
+        validap = valida_preferencia(self, turno, dispatcher)
+        if not validap:
+            return [SlotSet(SLOT_TURNO, None)]  
 
 
         parsed_date = valida_data(self, data, dispatcher)
@@ -125,9 +129,9 @@ def agendar_consulta(db, data, hora, numero_utente, especialidade):
 def procura_horario_livre(self, parsed_date, especialidade, turno, db):
     horarios = None
     if turno is None:
-        horarios = horarios_clinica["manha"] + horarios_clinica["tarde"]
-    elif turno.lower() == "manha" or turno.lower() == "manhã":
-        horarios = horarios_clinica["manha"]
+        horarios = horarios_clinica["manhã"] + horarios_clinica["tarde"]
+    elif turno.lower() == "manhã" or turno.lower() == "manhã":
+        horarios = horarios_clinica["manhã"]
     elif turno.lower() == "tarde":
         horarios = horarios_clinica["tarde"]
 
@@ -199,36 +203,41 @@ def valida_data(self, data, dispatcher):
     else:
         # Caso a conversão da data tenha falhado
         mensagem = f"Peço desculpa, não consegui entender a data [{data}] fornecida. " \
-                   f"Por favor, utilize por exemplo o formato dia-mês."
+                   f"Por favor, utilize, por exemplo, o formato dia-mês."
         dispatcher.utter_message(text=mensagem)
         return None
 
 
-class ValidaEspecialidade(Action):
-    def name(self) -> Text:
-        return "valida_especialidade"
-    
-    def run (self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        especialidade = tracker.get_slot("especialidade")
-
-        if especialidade not in ['Cardiologia', 'Dermatologia', 'Ginecologia', 'Ortopedia', 'Oftalmologia', 'Pediatria', 'Psicologia', 'Fisioterapia']:
-            mensagem = f"Lamento, mas não temos a especialidade [{especialidade}] na Clínica Saúde Total. " \
-                   f"Dispomos apenas das seguintes especialidades médicas: \t\n" + \
-                   "\n\t".join(ESPECIALIDADE) + "\nQual das especialidades pretende?"
-            dispatcher.utter_message(text=mensagem)
-            return [SlotSet("especialidade", None)]
-        else:
-            dispatcher.utter_message(text=f"A especialidade é {especialidade}")
-            return []
              
 def valida_especialidade(self, especialidade, dispatcher):
     if especialidade not in ESPECIALIDADE:
-        mensagem = f"Lamento, mas não temos a especialidade [{especialidade}] na Clínica Saúde Total. " \
+        mensagem = f"Lamento, mas não temos a especialidade {especialidade} na Clínica Saúde Total. " \
                    f"Dispomos apenas das seguintes especialidades médicas: \t\n" + \
-                   "\n\t".join(ESPECIALIDADE) + "\nQual das especialidades pretende?"
+                   "\n".join(ESPECIALIDADE) + "\nQual das especialidades pretende?"
         dispatcher.utter_message(text=mensagem)
         return False
     return True
+
+def valida_preferencia(self, turno, dispatcher):
+    if turno not in ['manhã', 'tarde']:
+        dispatcher.utter_message(text="Só pode inserir: manhã ou tarde")
+        return False
+    return True
+
+
+class ActionPreferencia(Action):
+    def name(self) -> Text:
+        return "action_preferencia"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        preferencia = tracker.get_slot("preferencia")
+
+        if preferencia not in ['manhã', 'tarde']:
+            dispatcher.utter_message(text="Por favor, tente novamente")
+            return [SlotSet("preferencia", None)]
+        else:
+            dispatcher.utter_message(text=f"Preferência: {preferencia}")
+            return []
 
 class CancelarConsultaAction(Action):
     def name(self) -> Text:
@@ -313,20 +322,6 @@ def fetch_connection():
         client.close()
 
 
-class ActionPreferencia(Action):
-    def name(self) -> Text:
-        return "action_preferencia"
-
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        preferencia = tracker.get_slot("preferencia")
-
-        if preferencia not in ['manha', 'tarde']:
-            dispatcher.utter_message(text="Só pode inserir: manha ou tarde")
-            return [SlotSet("preferencia", None)]
-        else:
-            dispatcher.utter_message(text=f"Ok!! A Preferência é {preferencia}")
-            return []
-
 
 class ListarConsultasAction(Action):
     def name(self) -> Text:
@@ -398,7 +393,7 @@ class ConfirmarReagendarConsultaAction(Action):
                 especialidade = marcacao["especialidade"]
                 hora = procura_horario_livre(self, new_parsed_date, especialidade, turno, db)
 
-                mensagem = f"Com certeza {nome}! \nEstive a verificar e tenho uma vaga a disponível para uma consulta de {especialidade} no dia {new_parsed_date} às {hora}. \nDeseja fazer a remarcação da consulta?"
+                mensagem = f"Com certeza {nome}! \nEstive a verificar e tenho uma vaga disponível para uma consulta de {especialidade} no dia {new_parsed_date} às {hora}. \nDeseja fazer a remarcação da consulta?"
                 dispatcher.utter_message(text=mensagem)
                 # Atualizar os slots com a nova data e horário
                 return [
@@ -479,7 +474,7 @@ class ActionListarDisponibilidade(Action):
                 mensagem = f"Nesse caso {nome}, posso sugerir alguns horários que temos disponíveis:\n" + \
                            "".join(horarios) + "\nAlgum deles seria indicado para si?"
             else:
-                mensagem = f"Lamento, mas não tenho disponibilidade para {especialidade} nos próximos 15 dias. " \
+                mensagem = f"Lamento, mas não existe disponibilidade para {especialidade} nos próximos 15 dias. " \
                            f"\nPretende sugerir uma nova data?"
             dispatcher.utter_message(text=mensagem)
 

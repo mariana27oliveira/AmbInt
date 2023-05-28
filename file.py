@@ -261,6 +261,21 @@ class ActionPreferencia(Action):
 
 
 
+class ActionPreferencia(Action):
+    def name(self) -> Text:
+        return "action_preferencia"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        preferencia = tracker.get_slot("preferencia")
+
+        if preferencia not in ['manhã', 'tarde']:
+            dispatcher.utter_message(text="Só pode inserir: manhã ou tarde")
+            return [SlotSet("preferencia", None)]
+        else:
+            dispatcher.utter_message(text=f"Preferência: {preferencia}")
+            return []
+
+          
 
 
 
@@ -271,6 +286,268 @@ class ActionPreferencia(Action):
 
 
 
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+- story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '111111111'
+  - slot_was_set:
+    - nr_utente: '111111111'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Ortopedia
+  - slot_was_set:
+    - especialidade: Ortopedia
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 29-08-2023
+  - slot_was_set:
+    - data: 29-08-2023
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: manha
+  - slot_was_set:
+    - preferencia: manha
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+
+- story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '111111111'
+  - slot_was_set:
+    - nr_utente: '111111111'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Ortopedia
+  - slot_was_set:
+    - especialidade: Ortopedia
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 27-06-2023
+  - slot_was_set:
+    - data: 27-06-2023
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: tarde
+  - slot_was_set:
+    - preferencia: tarde
+  - action: action_preferencia
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+
+- story: Listar Consultas
+  steps:
+  - intent: listar_consultas
+  - action: utter_ask_nr_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '190054321'
+  - slot_was_set:
+    - nr_utente: '190054321'
+  - action: action_listar_consultas
+  - intent: despedida
+  - action: utter_despedida
+
+
+
+
+
+
+- story: interactive_story_1
+  steps:
+  - intent: cancelar
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '789789789'
+  - slot_was_set:
+    - nr_utente: '789789789'
+  - action: utter_especialidade_cancelar
+  - intent: especialidade
+    entities:
+    - especialidade: Oftalmologia
+  - slot_was_set:
+    - especialidade: Oftalmologia
+  - action: utter_data_cancelamento
+  - intent: data
+    entities:
+    - data: 27-05-2023
+  - slot_was_set:
+    - data: 27-05-2023
+  - action: cancelar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+
+- story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '123456789'
+  - slot_was_set:
+    - nr_utente: '123456789'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Oftalmologia
+  - slot_was_set:
+    - especialidade: Oftalmologia
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 20-04-2024
+  - slot_was_set:
+    - data: 20-04-2024
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: manha
+  - slot_was_set:
+    - preferencia: manha
+  - action: action_preferencia
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+- story: Reagendar Consulta
+  steps:
+  - intent: saudacao
+  - action: utter_saudacao
+  - intent: nome
+    entities:
+    - nome: Maria
+  - slot_was_set:
+    - nome: Maria
+  - action: utter_questionar
+  - intent: reagendar_consulta
+    entities:
+    - data: 27 de maio
+    - nova_data: 27/06
+    - preferencia: tarde
+  - slot_was_set:
+    - data: 27 de maio
+  - slot_was_set:
+    - preferencia: tarde
+  - slot_was_set:
+    - nova_data: 27/06
+  - action: utter_ask_nr_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '190054321'
+  - slot_was_set:
+    - nr_utente: '190054321'
+  - action: action_confirmar_reagendar_consulta
+  - slot_was_set:
+    - nova_data: 27-06-2023
+  - slot_was_set:
+    - hora: 14:00
+  - slot_was_set:
+    - especialidade: Cardiologia
+  - intent: aceitar
+  - action: action_reagendar_consulta
+  - slot_was_set:
+    - data: null
+  - slot_was_set:
+    - nova_data: null
+  - slot_was_set:
+    - hora: null
+  - slot_was_set:
+    - especialidade: null
+  - slot_was_set:
+    - preferencia: null
+  - intent: negar
+  - action: action_listar_disponibilidade
+  - intent: escolher_horario
+    entities:
+      - hora: "10:00"
+  - slot_was_set:
+      - hora: "10:00"
+  - action: action_reagendar_consulta
+  - intent: despedida
+  - action: utter_despedida
+
+
+  
+
+- story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '111111111'
+  - slot_was_set:
+    - nr_utente: '111111111'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Pediatria
+  - slot_was_set:
+    - especialidade: Pediatria
+  - action: valida_especialidade
+
+- story: interactive_story_1
+  steps:
+  - intent: consulta
+  - action: utter_numero_utente
+  - intent: nr_utente
+    entities:
+    - nr_utente: '111111111'
+  - slot_was_set:
+    - nr_utente: '111111111'
+  - action: utter_especialidade
+  - intent: especialidade
+    entities:
+    - especialidade: Ortopedia
+  - slot_was_set:
+    - especialidade: Ortopedia
+  - action: utter_data
+  - intent: data
+    entities:
+    - data: 08-08-2023
+  - slot_was_set:
+    - data: 08-08-2023
+  - action: utter_preferencia
+  - intent: preferencia
+    entities:
+    - preferencia: tarde
+  - slot_was_set:
+    - preferencia: tarde
+  - action: agendar_consulta
+  - intent: despedida
+  - action: utter_despedida
 
 
 

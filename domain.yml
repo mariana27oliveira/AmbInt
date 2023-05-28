@@ -16,10 +16,10 @@ intents:
 - reagendar_consulta
 - saudacao
 entities:
+- data
 - especialidade
 - nr_utente
 - preferencia
-- data
 - nome
 - nova_data
 - hora
@@ -65,35 +65,35 @@ responses:
   utter_despedida:
   - text: Até breve {nome}! Foi um gosto ajudar.
   utter_questionar:
-  - text: Bem-vindo(a) à nossa clinica {nome}! Em que posso ajudar?
+  - text: Bem-vindo(a) à nossa clinica, {nome}! Em que posso ajudar?
   utter_numero_utente:
-  - text: Por favor, indica o teu número de utente
+  - text: Por favor, indique o seu número de utente.
   utter_ask_nr_utente:
-  - text: Com certeza {nome}! Podes indicar-me qual é o teu número de utente?
+  - text: Com certeza, {nome}! Por favor, indique o seu número de utente.
   utter_especialidade:
-  - text: Em que especialidade gostarias de agendar uma consulta?
+  - text: Em que especialidade gostaria de agendar uma consulta?
   utter_data:
-  - text: Em que data gostarias de agendar uma consulta?
+  - text: Em que data gostaria de agendar uma consulta?
   utter_preferencia:
-  - text: Preferes que a tua consulta seja de manhã ou de tarde?
+  - text: Tem preferência pelo horário da manhã ou de tarde?
   utter_data_cancelamento:
-  - text: Em que data está marcada a consulta?
+  - text: Indique a data atual da consulta, por favor. 
   utter_especialidade_cancelar:
   - text: De que especialidade é a consulta a desmarcar?
   utter_cancelada:
-  - text: Ok {nome}! A consulta marcada na data {data} foi cancelada!
+  - text: Ok, {nome}! A consulta marcada na data {data} foi cancelada!
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 actions:
-- valida_especialidade
+- utter_preferencia
+- action_preferencia
 - utter_numero_utente
 - utter_especialidade
-- agendar_consulta
 - utter_despedida
+- agendar_consulta
 - utter_data
-- action_preferencia
-- utter_preferencia
+- valida_especialidade
 - utter_data_cancelamento
 - cancelar_consulta
 - utter_especialidade_cancelar
